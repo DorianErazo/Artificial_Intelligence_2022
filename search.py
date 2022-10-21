@@ -15,8 +15,13 @@
 """
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
+
+-----------------------------------------------------------
+En esta parte del codigo estaran los algoritmos de busqueda!
+-----------------------------------------------------------
 """
 
+from pacman import GameState
 import util
 
 class SearchProblem:
@@ -31,6 +36,7 @@ class SearchProblem:
         """
         Returns the start state for the search problem.
         """
+        self.start_state
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -82,11 +88,53 @@ def depthFirstSearch(problem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
 
+    initial_node = (problem.getStartState(), None, 0, None)
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
+    -------------------- DFS --------------------
+    Visitamos todos los nodos, empezamos por el de mas izquierda en profundidad.
+    DFS(grafo, origen, objetivo)
+    Esto funciona en stack (LIFO), por lo tanto del util.py utilizaremos la class stack
+    El coste puede ser O(v^2)
+
     """
     "*** YOUR CODE HERE ***"
+
+    stack = util.Stack()
+    #visited = {}
+    visited = set()
+    s0_node = problem.getStartState()
+    #Pasamos el primer nodo del arbol al stack
+    stack.push(s0_node)
+    #next_node = problem.getSuccessors(initial_node)
+
+    while not stack.isEmpty:
+        #cogemos la ultima posicion del stack y lo guardamos en next_node
+        current_node = stack.pop()
+        #si el último nodo es el nodo final (goal) devolvemos su path
+        if problem.isGoalState(current_node[0]):
+            action = [current_node[1]]
+            aux_backtrack = current_node[3]
+
+            while aux_backtrack is not None:
+                    action.append(aux_backtrack[1])
+                    aux_backtrack = aux_backtrack[3]
+                    return action
+        else:
+            if current_node[0] not in visited:
+                visited.add(current_node[0])
+                ##aqui habria que expandir los nodos y luego añadir a la pila
+
+
+        
+
+        
+    
+
+
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
