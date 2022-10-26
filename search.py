@@ -36,7 +36,7 @@ class SearchProblem:
         """
         Returns the start state for the search problem.
         """
-        self.start_state
+        #self.start_state
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -88,7 +88,6 @@ def depthFirstSearch(problem):
     To get started, you might want to try some of these simple commands to
     understand the search problem that is being passed in:
 
-    initial_node = (problem.getStartState(), None, 0, None)
     print("Start:", problem.getStartState())
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
@@ -107,15 +106,19 @@ def depthFirstSearch(problem):
     #Lista de nodos auxiliares donde añadiremos el path mas <<optimo>>
     visited_nodes = []
 
+    #declare first node
     s0_node = problem.getStartState()
+    print("Start:", problem.getStartState())
+
+    "Remember that a search node must contain not only a state but also the information necessary to reconstruct the path (plan) which gets to that state."
     #Pasamos el primer nodo del arbol al stack
-    stack.push(s0_node)
-    #next_node = problem.getSuccessors(initial_node)
+    stack.push((s0_node, []))
 
     while not stack.isEmpty():
-        #cogemos la ultima posicion del stack y lo guardamos en next_node
-        current_node = stack.pop()
-        aux_current = current_node
+        #esto funciona tal que asi; stack [1,2]. Queremos las dos posiciones, la primera y la 2na (donde actuamos)
+        #current_node = 1 y last_node = 2
+        current_node,  last_node = stack.pop()
+        
         #si el último nodo es el nodo final (goal) devolvemos su path (backtrack)
         """
         if problem.isGoalState(current_node[0]):
@@ -135,12 +138,13 @@ def depthFirstSearch(problem):
             visited_nodes.append(current_node)
 
             if problem.isGoalState(current_node):
-                return current_node
+                print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+                return last_node
 
-
-
-
-    util.raiseNotDefined()
+            for next_node, action, cost in problem.getSuccessors(current_node):
+                next_actions = last_node + [action]
+                stack.push((next_node, next_actions))
+                print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
