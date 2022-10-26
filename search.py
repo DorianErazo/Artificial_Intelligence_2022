@@ -117,7 +117,7 @@ def depthFirstSearch(problem):
     while not stack.isEmpty():
         #esto funciona tal que asi; stack [1,2]. Queremos las dos posiciones, la primera y la 2na (donde actuamos)
         #current_node = 1 y last_node = 2
-        current_node,  last_node = stack.pop()
+        current_node, last_node = stack.pop()
         
         #si el último nodo es el nodo final (goal) devolvemos su path (backtrack)
         """
@@ -141,10 +141,12 @@ def depthFirstSearch(problem):
                 print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
                 return last_node
 
+            #pasamos 3 condiciones a cumplir xq la funcion getsuccesor pasa 3 atributos
             for next_node, action, cost in problem.getSuccessors(current_node):
                 next_actions = last_node + [action]
                 stack.push((next_node, next_actions))
-                print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+        print("Is the start a goal?", problem.isGoalState(problem.getStartState())) 
+        print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
