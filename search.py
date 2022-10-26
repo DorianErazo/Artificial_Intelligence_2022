@@ -102,18 +102,22 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
+    #Declaramos la pila con la que vamos a trabajar
     stack = util.Stack()
-    #visited = {}
-    visited = set()
+    #Lista de nodos auxiliares donde añadiremos el path mas <<optimo>>
+    visited_nodes = []
+
     s0_node = problem.getStartState()
     #Pasamos el primer nodo del arbol al stack
     stack.push(s0_node)
     #next_node = problem.getSuccessors(initial_node)
 
-    while not stack.isEmpty:
+    while not stack.isEmpty():
         #cogemos la ultima posicion del stack y lo guardamos en next_node
         current_node = stack.pop()
-        #si el último nodo es el nodo final (goal) devolvemos su path
+        aux_current = current_node
+        #si el último nodo es el nodo final (goal) devolvemos su path (backtrack)
+        """
         if problem.isGoalState(current_node[0]):
             action = [current_node[1]]
             aux_backtrack = current_node[3]
@@ -126,12 +130,13 @@ def depthFirstSearch(problem):
             if current_node[0] not in visited:
                 visited.add(current_node[0])
                 ##aqui habria que expandir los nodos y luego añadir a la pila
+        """
+        if current_node not in visited_nodes:
+            visited_nodes.append(current_node)
 
+            if problem.isGoalState(current_node):
+                return current_node
 
-        
-
-        
-    
 
 
 
