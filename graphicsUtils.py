@@ -19,6 +19,9 @@ import string
 import time
 import types
 import tkinter
+
+from graphicsUtils import *
+
 import os.path
 
 _Windows = sys.platform == 'win32'  # True if on Win95/98/NT

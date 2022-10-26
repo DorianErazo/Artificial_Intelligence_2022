@@ -48,6 +48,12 @@ from util import manhattanDistance
 import util, layout
 import sys, types, time, random, os
 
+#import graphicsDisplay
+#import tkinter
+
+from tkinter import *
+from tkinter import ttk
+
 ###################################################
 # YOUR INTERFACE TO THE PACMAN WORLD: A GameState #
 ###################################################
