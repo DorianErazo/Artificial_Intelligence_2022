@@ -116,42 +116,43 @@ def depthFirstSearch(problem):
 
     while not stack.isEmpty():
         #esto funciona tal que asi; stack [1,2]. Queremos las dos posiciones, la primera y la 2na (donde actuamos)
-        #current_node = 1 y last_node = 2
-        current_node, last_node = stack.pop()
-        
-        #si el último nodo es el nodo final (goal) devolvemos su path (backtrack)
-        """
-        if problem.isGoalState(current_node[0]):
-            action = [current_node[1]]
-            aux_backtrack = current_node[3]
+        #current_node = 1 y coor_nodes = 2
+        current_node, coor_nodes = stack.pop()
+        #print("coor_nodes_action: ", coor_nodes)
+        #print("current_node: ", current_node)
 
-            while aux_backtrack is not None:
-                    action.append(aux_backtrack[1])
-                    aux_backtrack = aux_backtrack[3]
-                    return action
-        else:
-            if current_node[0] not in visited:
-                visited.add(current_node[0])
-                ##aqui habria que expandir los nodos y luego añadir a la pila
-        """
         if current_node not in visited_nodes:
             visited_nodes.append(current_node)
+            #print("Start's successors en append current:", problem.getSuccessors(problem.getStartState()))
+            #print("Is the start a goal?", problem.isGoalState(problem.getStartState())) 
 
             if problem.isGoalState(current_node):
-                print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-                return last_node
+                print("----------") 
+                print("visited_node: ", visited_nodes)
+                print("current_node: ", current_node)
+                print("Is the start a goal en goal state?", problem.isGoalState(current_node))
+                print("action: ", coor_nodes)
+                print("----------") 
+                return coor_nodes
 
             #pasamos 3 condiciones a cumplir xq la funcion getsuccesor pasa 3 atributos
             for next_node, action, cost in problem.getSuccessors(current_node):
-                next_actions = last_node + [action]
+                next_actions = coor_nodes + [action]
                 stack.push((next_node, next_actions))
-        print("Is the start a goal?", problem.isGoalState(problem.getStartState())) 
-        print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited_nodes = []
+    qlist = util.Queue
+
+    initial_node = problem.getStartState()
+
+    visited_nodes.append(initial_node)
+    qlist.append(initial_node)
+
+
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
