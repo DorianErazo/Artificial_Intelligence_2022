@@ -146,10 +146,17 @@ def breadthFirstSearch(problem):
     visited_nodes = []
     qlist = util.Queue
 
-    initial_node = problem.getStartState()
+    visited_nodes.append(problem.getStartState())
+    qlist.push(problem.getStartState(), [])
 
-    visited_nodes.append(initial_node)
-    qlist.append(initial_node)
+    while not qlist.isEmpty():
+        current_node, coord = qlist.pop()
+
+        for neighbour in qlist:
+            if neighbour not in visited_nodes:
+                visited_nodes.append(neighbour)
+            if problem.isGoalState(current_node):
+                return coord
 
 
 
