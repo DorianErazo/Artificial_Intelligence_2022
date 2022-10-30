@@ -118,21 +118,14 @@ def depthFirstSearch(problem):
         #esto funciona tal que asi; stack [1,2]. Queremos las dos posiciones, la primera y la 2na (donde actuamos)
         #current_node = 1 y coor_nodes = 2
         current_node, coor_nodes = stack.pop()
-        #print("coor_nodes_action: ", coor_nodes)
-        #print("current_node: ", current_node)
 
         if current_node not in visited_nodes:
             visited_nodes.append(current_node)
-            #print("Start's successors en append current:", problem.getSuccessors(problem.getStartState()))
-            #print("Is the start a goal?", problem.isGoalState(problem.getStartState())) 
+            print("Is the start a goal?", problem.isGoalState(problem.getStartState())) 
 
             if problem.isGoalState(current_node):
-                print("----------") 
-                print("visited_node: ", visited_nodes)
-                print("current_node: ", current_node)
-                print("Is the start a goal en goal state?", problem.isGoalState(current_node))
                 print("action: ", coor_nodes)
-                print("----------") 
+                print("Is the start a goal en goal state?", problem.isGoalState(current_node))
                 return coor_nodes
 
             #pasamos 3 condiciones a cumplir xq la funcion getsuccesor pasa 3 atributos
@@ -142,16 +135,25 @@ def depthFirstSearch(problem):
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
+    #El problema es basicamente el mismo que el anterior, entonces solo va a cambiar el modo de uso
+    #del tipo de dato, que en este caso es una lista.
+    #todo el codigo va a ser igual. 
     "*** YOUR CODE HERE ***"
 
     qlist = util.Queue()
     visited_nodes = []
 
-    visited_nodes.append((problem.getStartState(), []))
-    print("vitied nodes al 0", visited_nodes)
+    #no hace falta añadir el primer nodo a la lista de visitados. Lo hara el While de abajo
+    #Aun que descomentemos las lineas de abajo el codigo funcionara con los comandos
+    #python pacman.py -l mediumMaze -p SearchAgent -a fn=bfs
+    #No obstante para que funcione el comando python eightpuzzle.py tenemos que quitar el primer
+    #nodo visitado, esto se debe al rango de numeros que acepta el puzzle
+
+    #visited_nodes.append((problem.getStartState(), []))
+    #print("vitied nodes al 0", visited_nodes)
 
     qlist.push((problem.getStartState(), []))
-    print("qlist: ", qlist)
+    #print("qlist: ", qlist)
 
     while not qlist.isEmpty():
         current_node, coord = qlist.pop()
@@ -183,7 +185,58 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #https://www.pythonpool.com/a-star-algorithm-python/
+    #https://www.youtube.com/watch?v=FQsHjAuVkIs
+    """
+    Para poder usar el A* vamos a necesitar dos cosas principalmente 
+    Heuristica h(n)
+    Costo de "caminos" h(n)
+
+    f(n) = g(n) + h(n)
+
+    Para almacenar los datos necesitaremos varias listas
+    open_list, guarda el camino de los nodos no visitados (no lo usare)
+    closed_list, que guarda el camino de los si visitados
+
+    Otras listas para guarda la distancia del camino 
+    path_len (lo tenemos por funcion)
+    
+    Y nuestros nodos.
+    En esta funcion vamos a tener 3 datos que nos llegan desde la llamada de la
+    funcion, dos en problem y otro en heuristic.
+
+    (coordenada, accion del nodo actual, coste del actual nodo) y a parte su prioridad (priority queue)
+    Usaremos priority queue de la clase Utils ya que asi se nos organizara por
+    valor, por ejemplo ti tenemos una lista de numeros la forma de organizar seria de menor a mayor.
+    """
+    p_queue = util.PriorityQueue()
+    start_node = problem.getStartState()
+
+    closed_list = []
+
+    #push(self, item, priority):
+    p_queue.push((start_node, [], 0), 0)
+    current_node, coord, current_node_cost = p_queue.pop()
+    print("-----------------------------------")
+    print("pqueue: ", current_node, coord, current_node_cost)
+    print("-----------------------------------")
+
+    while not p_queue.isEmpty:
+        
+        current_node, coord, current_node_cost = p_queue.pop()
+
+        if current_node not in closed_list:
+            closed_list.append(current_node)
+
+            if problem.isGoalState(current_node):
+                return coord
+
+            for next_node, action, cost in problem.getSuccessors(current_node):
+                next_action = action + [coord]
+                new_cost_node = current_node_cost + cost
+                heuristic_cost = new_cost_node + heuristic(next_node, problem)
+                p_queue.push((next_node, next_action, new_cost_node), heuristic_cost)
+
 
 
 # Abbreviations
