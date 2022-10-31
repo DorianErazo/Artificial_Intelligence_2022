@@ -240,6 +240,14 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     if problem.isGoalState(problem.getStartState()):
         return []
 
+    p_queue = util.PriorityQueue()
+    #push puede recibir estos datos push(self, item, priority). lo de los parentesis es item y el 0 
+    #es la prioridad
+    p_queue.push((problem.getStartState(), [], 0), 0)
+
+    if problem.isGoalState(problem.getStartState()):
+        return []
+
     while not p_queue.isEmpty():
 
         current_node, coord, current_node_cost = p_queue.pop()
