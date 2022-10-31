@@ -209,20 +209,19 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     Usaremos priority queue de la clase Utils ya que asi se nos organizara por
     valor, por ejemplo ti tenemos una lista de numeros la forma de organizar seria de menor a mayor.
     """
-    p_queue = util.PriorityQueue()
-    start_node = problem.getStartState()
 
     closed_list = []
 
-    #push(self, item, priority):
-    p_queue.push((start_node, [], 0), 0)
-    current_node, coord, current_node_cost = p_queue.pop()
-    print("-----------------------------------")
-    print("pqueue: ", current_node, coord, current_node_cost)
-    print("-----------------------------------")
+    p_queue = util.PriorityQueue()
+    #Al push se le pueden añadir datos tal que: push(self, item, priority). Siendo item lo del parentesis y 0
+    #la prioridad
+    p_queue.push((problem.getStartState(), [], 0), 0)
 
-    while not p_queue.isEmpty:
-        
+    if problem.isGoalState(problem.getStartState()):
+        return []
+
+    while not p_queue.isEmpty():
+
         current_node, coord, current_node_cost = p_queue.pop()
 
         if current_node not in closed_list:
@@ -232,10 +231,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 return coord
 
             for next_node, action, cost in problem.getSuccessors(current_node):
-                next_action = action + [coord]
+                next_action = coord + [action]
                 new_cost_node = current_node_cost + cost
-                heuristic_cost = new_cost_node + heuristic(next_node, problem)
-                p_queue.push((next_node, next_action, new_cost_node), heuristic_cost)
+                cost_heuristic = new_cost_node + heuristic(next_node,problem)
+                p_queue.push((next_node, next_action, new_cost_node),cost_heuristic)
 
 
 
