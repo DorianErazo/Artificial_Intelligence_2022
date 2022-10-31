@@ -230,7 +230,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     Usaremos priority queue de la clase Utils ya que asi se nos organizara por
     valor, por ejemplo ti tenemos una lista de numeros la forma de organizar seria de menor a mayor.
     """
-
     closed_list = []
     
     p_queue = util.PriorityQueue()
@@ -253,7 +252,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
             for next_node, action, cost in problem.getSuccessors(current_node):
                 next_action = coord + [action]
+                #El costo lo sumaremos de esta forma
                 new_cost_node = current_node_cost + cost
+                #Aqui aplicamos la formula f(n) = g(n)+h(n)
+                #nota, usamos heuristic de la abreviacion en la llamada de la funcion en lugar de
+                #nullHeuristic ya que si no el autograder nos da un 0. 
                 cost_heuristic = new_cost_node + heuristic(next_node,problem)
                 p_queue.push((next_node, next_action, new_cost_node),cost_heuristic)
 
