@@ -21,7 +21,7 @@ En esta parte del codigo estaran los algoritmos de busqueda!
 -----------------------------------------------------------
 """
 
-from pacman import GameState
+
 import util
 
 class SearchProblem:
@@ -173,7 +173,28 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #Declaramos priority queue
+    pqlist = util.PriorityQueue()
+    visited_nodes = []
+
+    #Pasamos el primer nodo con coste 0 a la cola.
+    pqlist.push((problem.getStartState(), [], 0), 0)
+
+    while not pqlist.isEmpty():
+        current_node, coord, cost = pqlist.pop()
+
+        if current_node not in visited_nodes:
+            visited_nodes.append(current_node)
+
+            if problem.isGoalState(current_node):
+               return coord
+
+            #Añadimos los nuevos nodos junto a su coste a la priority queue, de forma que se ordenen de menor a mayor coste.
+            for next_node, action, nextcost in problem.getSuccessors(current_node):
+                if next_node not in visited_nodes:
+                    next_action = coord + [action]
+                    priority = cost + nextcost
+                    pqlist.push((next_node, next_action, priority), priority)
 
 def nullHeuristic(state, problem=None):
     """
@@ -211,7 +232,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """
 
     closed_list = []
-
+    
     p_queue = util.PriorityQueue()
     #Al push se le pueden añadir datos tal que: push(self, item, priority). Siendo item lo del parentesis y 0
     #la prioridad
