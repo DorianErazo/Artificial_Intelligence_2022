@@ -34,6 +34,7 @@ description for details.
 Good luck and happy searching!
 """
 
+#from sqlalchemy import false
 from game import Directions
 from game import Agent
 from game import Actions
@@ -288,6 +289,9 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        #la dimension es 4, como la cantidad por cada par de datos que tenemos en corner.
+        #self.initialState = [(), (), (), ()]
+        self.initialState = [0,0,0,0]
 
     def getStartState(self):
         """
@@ -295,14 +299,25 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return (self.startingPosition, [])
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        node = state[0]
+        visited_corners = state[1]
+
+        if node in self.corners:
+            if not node in visited_corners:
+                visited_corners.append(node)
+                #el tamaño es 4, su formato esta declarado en el init
+                print("--------------------")
+                print("tamano: ",len(visited_corners))
+                print("--------------------")
+            return len(visited_corners) == 4
+        return False
 
     def getSuccessors(self, state):
         """
@@ -314,8 +329,10 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-
+        x, y = state[0]
+        visited_corners = state[1]
         successors = []
+
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -325,6 +342,22 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            #Tal y como se ha hecho en la linea de codigo getSuccessor 184 (de la classPositionSearchProblem) 
+            # vamos a seguir el mismo formato. A parte uscamos las currents positions, 
+            # #actions, states y abreviacion del comentario de ayuda
+
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
+
+            if not hitsWall:
+                successorVisitedCorners = list(visited_corners)
+                next_state = (nextx, nexty)
+                if next_state in self.corners:
+                    if next_state not in successorVisitedCorners:
+                        successorVisitedCorners.append(next_state)
+                successor = ((next_state, successorVisitedCorners), action, 1)
+                successors.append(successor)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
