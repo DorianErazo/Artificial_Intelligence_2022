@@ -379,12 +379,9 @@ class CornersProblem(search.SearchProblem):
 def cornersHeuristic(state, problem):
     """
     A heuristic for the CornersProblem that you defined.
-
       state:   The current search state
                (a data structure you chose in your search problem)
-
       problem: The CornersProblem instance for this layout.
-
     This function should always return a number that is a lower bound on the
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
@@ -393,7 +390,25 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    visited_corners = state[1]
+    coord = state[0]
+    distances = []
+    heuristic = 0
+
+    #calculamos las distancias de manhattan para cada esquina sin visitar
+    for corner in corners:
+        if corner not in visited_corners:
+            mnhtn_dist = util.manhattanDistance(coord, corner)
+            distances.append(mnhtn_dist)
+
+    #como heuristica escogemos la mayor distancia hasta una esquina sin visitar
+    for dist in distances:
+        heuristic = max(dist, heuristic)
+    #Esta heuristica es admisible ya que al devolver la mayor distancia hasta la esquina mas lejana
+    #el coste de llegar a esa esquina y las demás sin visitar (si las hay) será mayor o igual.
+    #es consistente ya que cada accion no puede repercutir en la distancia de manhattan hasta la
+    #esquina más lejana mas que el coste de la propia acción.
+    return heuristic
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -487,7 +502,26 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+        #La heuristica suma las distancias hasta cada comida y lo divide entre la cantidad de puntos por comer
+    #recompensando asi moverse a zonas abundantes en comida
+
+    distances = []
+    foodcoords = foodGrid.asList()
+    sumdists = 0
+    for food in foodcoords:
+        mnhtn = util.manhattanDistance(position, food)
+        distances.append(mnhtn)
+
+    for dist in distances:
+        sumdists += dist
+    totalfood = len(foodcoords)
+
+    if totalfood != 0:
+        heuristic = sumdists/len(foodcoords)
+    else:
+        return 0
+
+    return heuristic
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
