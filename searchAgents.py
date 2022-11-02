@@ -331,12 +331,12 @@ class CornersProblem(search.SearchProblem):
             hitsWall = self.walls[nextx][nexty]
 
             if not hitsWall:
-                successorVisitedCorners = list(visited_corners)
+                successor_visited_corners = list(visited_corners)
                 next_state = (nextx, nexty)
                 if next_state in self.corners:
-                    if next_state not in successorVisitedCorners:
-                        successorVisitedCorners.append(next_state)
-                successor = ((next_state, successorVisitedCorners), action, 1)
+                    if next_state not in successor_visited_corners:
+                        successor_visited_corners.append(next_state)
+                successor = ((next_state, successor_visited_corners), action, 1)
                 successors.append(successor)
 
         self._expanded += 1 # DO NOT CHANGE

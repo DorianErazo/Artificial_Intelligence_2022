@@ -116,7 +116,8 @@ def depthFirstSearch(problem):
 
     while not stack.isEmpty():
         #esto funciona tal que asi; stack [1,2]. Queremos las dos posiciones, la primera y la 2na (donde actuamos)
-        #current_node = 1 y coor_nodes = 2
+        #current_node = 1 y coor_nodes = 2. Problem nos devuelve dos datos asi que esto nos vendra bien para todas 
+        #los demas apartados!
         current_node, coor_nodes = stack.pop()
 
         if current_node not in visited_nodes:
